@@ -1,0 +1,48 @@
+/* TABLE STYLE */
+td {
+	border: 2px solid #333;
+	height: 100px;
+	width: 100px;
+	text-align: center;
+	vertical-align: middle;
+	font-family: "Comic Sans Ms", cursive;
+	font-size: 70px;
+	cursor: pointer;
+}
+
+table {
+	border-collapse: collapse; /* removes gap between border */
+	position: absolute;
+	left: 50%;
+	margin-left: -155px; /* Re-centers grid.  table is 310px, -155 moves half */
+	top: 50px;
+}
+/* ----------------- */
+
+/* REMOVE BORDERS */
+table tr:first-child td {
+	/*Top Row td */
+	border-top: 0;
+}
+
+table tr:last-child td {
+	/*bottom Row td */
+	border-bottom: 0;
+}
+
+table td:first-child {
+	/*left td */
+	border-left: 0;
+}
+
+table td:last-child {
+	/*right td */
+	border-right: 0;
+}
+/* ------------------- */
+
+/* END GAME ELEMENT  */
+.endgame {
+	display: none;
+	
+}

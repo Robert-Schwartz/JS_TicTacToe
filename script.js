@@ -85,13 +85,12 @@ function declareWinner(who) {
 }
 
 // BASIC AI
-
 function emptySquares() {
 	return originalBoard.filter((s) => typeof s == "number");
 }
 
 function bestSpot() {
-	return emptySquares()[0];
+	return minimax(originalBoard, aiPlayer).index;
 }
 
 function checkTie() {
@@ -104,4 +103,63 @@ function checkTie() {
 		}
 		return false;
 	}
+}
+
+// MiniMax Algorithm
+/*  MiniMax function will do the following:
+1.  Return a value if a terminal state is found (+10,0,-10)
+2.  Go through available sports on the board
+3.  Call the minimax function on each available spot (recursion)
+4.  evaluate returning values from function calls
+5.  Returns the best value
+*/
+
+function minimax(newBoard, player) {
+	let availSpots = emptySquares(newBoard);
+
+	if (checkWin(newBoard, player)) {
+		return { score: -10 };
+	} else if (checkWin(newBoard, aiPlayer)) {
+		return { score: 20 };
+	} else if (availSpots.length === 0) {
+		return { score: 0 };
+	}
+	let moves = [];
+	for (let i = 0; i < availSpots.length; i++) {
+		let move = {};
+		move.index = newBoard[availSpots[i]];
+		newBoard[availSpots[i]] = player;
+
+		if (player == aiPlayer) {
+			let result = minimax(newBoard, humanPlayer);
+			move.score = result.score;
+		} else {
+			let result = minimax(newBoard, aiPlayer);
+			move.score = result.score;
+		}
+
+		newBoard[availSpots[i]] = move.index;
+
+		moves.push(move);
+	}
+
+	let bestMove;
+	if (player === aiPlayer) {
+		let bestScore = -10000;
+		for (let i = 0; i < moves.length; i++) {
+			if (moves[i].score > bestScore) {
+				bestScore = moves[i].score;
+				bestMove = i;
+			}
+		}
+	} else {
+		let bestScore = 10000;
+		for (let i = 0; i < moves.length; i++) {
+			if (moves[i].score < bestScore) {
+				bestScore = moves[i].score;
+				bestMove = i;
+			}
+		}
+	}
+	return moves[bestMove];
 }

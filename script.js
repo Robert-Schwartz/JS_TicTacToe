@@ -36,8 +36,11 @@ function startGame() {
 
 // TURN CLICK - calls turn function when human clicks on square
 function turnClick(square) {
-	console.log("you clicked on square:", square.target.id); //Identify clicked square
-	turn(square.target.id, humanPlayer); // calls turn func & sends squareID and Player as arguments
+	if (typeof originalBoard[square.target.id] == "number") {
+		console.log("you clicked on square:", square.target.id); //Identify clicked square
+		turn(square.target.id, humanPlayer); // calls turn func & sends squareID and Player as arguments
+		if (!checkTie()) turn(bestSpot(), aiPlayer); // if not a tie, then the AI player will take a turn
+	}
 }
 
 // TURN FUNCTION
@@ -53,8 +56,10 @@ function checkWin(board, player) {
 	let plays = board.reduce((a, e, i) => (e === player ? a.concat(i) : a), []);
 	let gameWon = null;
 	for (let [index, win] of winCombos.entries()) {
-		if (win.every(elem => plays.indexOf(elem) > -1)) { //has the player played in every index of a winning array
-			gameWon = {index: index, player: player};
+		// check if game is won
+		if (win.every((elem) => plays.indexOf(elem) > -1)) {
+			//has the player played in every index of a winning array
+			gameWon = { index: index, player: player };
 			break;
 		}
 	}
@@ -70,5 +75,33 @@ function gameOver(gameWon) {
 	for (var i = 0; i < cells.length; i++) {
 		cells[i].removeEventListener("click", turnClick, false);
 	}
+	// show if you win or lose
+	declareWinner(gameWon.player == humanPlayer ? "You win!" : "You Lose!");
 }
 
+function declareWinner(who) {
+	document.querySelector(".endgame").style.display = "block";
+	document.querySelector(".endgame .text").innerText = who;
+}
+
+// BASIC AI
+
+function emptySquares() {
+	return originalBoard.filter((s) => typeof s == "number");
+}
+
+function bestSpot() {
+	return emptySquares()[0];
+}
+
+function checkTie() {
+	if (emptySquares().length == 0) {
+		for (let i = 0; i < cells.length; i++) {
+			cells[i].style.backgroundColor = "green";
+			cells[i].removeEventListener("click", turnClick, false);
+			declareWinner("Tie Game");
+			return true;
+		}
+		return false;
+	}
+}

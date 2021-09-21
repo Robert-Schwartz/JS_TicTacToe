@@ -105,14 +105,6 @@ function checkTie() {
 	}
 }
 
-/*  MiniMax function will do the following:
-1.  Return a value if a terminal state is found (+10,0,-10)
-2.  Go through available sports on the board
-3.  Call the minimax function on each available spot (recursion)
-4.  evaluate returning values from function calls
-5.  Returns the best value
-*/
-
 // MiniMax Algorithm
 function minimax(newBoard, player) {
 	//makes an array of available spots
@@ -148,7 +140,7 @@ function minimax(newBoard, player) {
 	}
 
 	let bestMove;
-	// find best available move 
+	// find best available move
 	if (player === aiPlayer) {
 		let bestScore = -10000;
 		for (let i = 0; i < moves.length; i++) {

@@ -105,7 +105,6 @@ function checkTie() {
 	}
 }
 
-// MiniMax Algorithm
 /*  MiniMax function will do the following:
 1.  Return a value if a terminal state is found (+10,0,-10)
 2.  Go through available sports on the board
@@ -114,9 +113,12 @@ function checkTie() {
 5.  Returns the best value
 */
 
+// MiniMax Algorithm
 function minimax(newBoard, player) {
+	//makes an array of available spots
 	let availSpots = emptySquares(newBoard);
 
+	// check for terminal states
 	if (checkWin(newBoard, player)) {
 		return { score: -10 };
 	} else if (checkWin(newBoard, aiPlayer)) {
@@ -125,11 +127,13 @@ function minimax(newBoard, player) {
 		return { score: 0 };
 	}
 	let moves = [];
+	//loop through every available space starting from the first
 	for (let i = 0; i < availSpots.length; i++) {
 		let move = {};
 		move.index = newBoard[availSpots[i]];
 		newBoard[availSpots[i]] = player;
 
+		// calls itself to add new board and the player
 		if (player == aiPlayer) {
 			let result = minimax(newBoard, humanPlayer);
 			move.score = result.score;
@@ -144,6 +148,7 @@ function minimax(newBoard, player) {
 	}
 
 	let bestMove;
+	// find best available move 
 	if (player === aiPlayer) {
 		let bestScore = -10000;
 		for (let i = 0; i < moves.length; i++) {
